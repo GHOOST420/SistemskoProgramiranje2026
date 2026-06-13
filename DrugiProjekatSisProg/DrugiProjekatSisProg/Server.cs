@@ -18,12 +18,7 @@ namespace DrugiProjekatSisProg
         private const string InternalApiUrl = "http://localhost";
         private const int InternalApiPort = 5080;
 
-        static Server()
-        {
-            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
-            httpClient.DefaultRequestHeaders.Add("AIC-User-Agent", "MyChicagoApp (me@domain.com)");
-            httpClient.DefaultRequestHeaders.Accept.ParseAdd("application/json");
-        }
+        
 
         public static void StartAsync()
         {
@@ -130,12 +125,8 @@ namespace DrugiProjekatSisProg
 
                 });
 
-         /*       if (string.IsNullOrWhiteSpace(response) || response.StartsWith("Empty API response", StringComparison.Ordinal))
-                    await ReturnTextAsync(context, response ?? "Empty API response", HttpStatusCode.BadRequest);
-                else if (response.StartsWith("No artworks", StringComparison.Ordinal))
-                    await ReturnTextAsync(context, response, HttpStatusCode.NoContent);
-                else*/
-                    await ReturnJsonAsync(context, response, HttpStatusCode.OK);
+        
+                    await ReturnTextAsync(context, response, HttpStatusCode.OK);
 
             }
             catch (Exception ex)
@@ -145,19 +136,6 @@ namespace DrugiProjekatSisProg
             }
         }
 
-        private static async ValueTask ReturnJsonAsync(HttpListenerContext context, string json, HttpStatusCode status)
-        {
-            byte[] buffer = Encoding.UTF8.GetBytes(json);
-            var response = context.Response;
-            response.ContentType = "application/json; charset=utf-8";
-            response.StatusCode = (int)status;
-            AddCorsHeaders(response);
-
-            await using var output = response.OutputStream;
-            await output.WriteAsync(buffer.AsMemory());
-
-            Logger.Request($"Request completed: {context.Request.RawUrl}, Status: {status}");
-        }
 
         private static async ValueTask ReturnTextAsync(HttpListenerContext context, string text, HttpStatusCode status)
         {
