@@ -11,10 +11,9 @@ namespace DrugiProjekatSisProg
     {
         private static readonly HttpListener listener = new();
         private static readonly Cache cache = new();
-        private static readonly HttpClient httpClient = new();
         private static CancellationTokenSource? _cts;
 
-        private const string BaseApiUrl = "https://api.artic.edu/api/v1/artworks/search?q=";
+      
         private const string InternalApiUrl = "http://localhost";
         private const int InternalApiPort = 5080;
 
@@ -117,11 +116,11 @@ namespace DrugiProjekatSisProg
                 string cacheKey = fileName;
 
 
-                string? response = await cache.GetOrAddAsync(cacheKey, async () =>
+                string? response = await cache.GetOrAddAsync(cacheKey, () =>
                 {
 
-                   string algoritamResponse= await Algoritam.StartAsync(fileName);//samo funkc
-                    return algoritamResponse;
+                 return Algoritam.StartAsync(fileName);//samo funkc 
+                    
 
                 });
 
